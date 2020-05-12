@@ -17,7 +17,6 @@ activity$interval <- as.factor(activity$interval)
 ## What is mean total number of steps taken per day?
 
 ```{r, echo=TRUE}
-library(dplyr)
 
 activity_sum <- aggregate(steps ~ date, activity, sum, na.rm=TRUE)
 colnames(activity_sum) <- c("date","steps")
@@ -33,14 +32,14 @@ median(activity_sum$steps)
 ## What is the average daily activity pattern?
 
 ```{r, echo=TRUE}
-
+library(dplyr)
 activity_av <- activity%>%
     group_by(interval) %>%
     summarise(av=mean(steps, na.rm=TRUE))
 
-print(plot(activity_av$interval, activity_av$av, type="l", xlab="5min interval", ylab="average number of steps", main="Average daily activity pattern"))
+plot(activity_av$interval, activity_av$av, type="l", xlab="5min interval", ylab="average number of steps", main="Average daily activity pattern")
 
-print(activity_av[activity_av$av==max(activity_av$av),])
+activity_av[activity_av$av==max(activity_av$av),]
 
 ```
 
@@ -50,6 +49,18 @@ print(activity_av[activity_av$av==max(activity_av$av),])
 ```{r, echo=TRUE}
 
 sum(is.na(activity))
+
+imputed_data <- transform(activity, steps = ifelse(is.na(activity$steps), activity_av$av[match(activity$interval, activity_av$interval)], activity$steps))
+
+sum(is.na(imputed_data))
+
+imputed_sum <- aggregate(steps ~ date, imputed_data, sum)
+colnames(imputed_sum) <- c("date","steps")
+
+hist(imputed_sum$steps, main="Total number of steps daily taken", xlab="")
+
+mean(imputed_sum$steps)
+median(imputed_sum$steps)
 
 
 ```
