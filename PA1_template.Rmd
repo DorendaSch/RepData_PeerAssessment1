@@ -19,14 +19,13 @@ activity$interval <- as.factor(activity$interval)
 ```{r, echo=TRUE}
 library(dplyr)
 
-activity_sum <- activity%>%
-    group_by(date) %>%
-    summarise(daily=sum(steps, na.rm=TRUE))
+activity_sum <- aggregate(steps ~ date, activity, sum, na.rm=TRUE)
+colnames(activity_sum) <- c("date","steps")
 
-print(hist(activity_sum$daily, main="Histogram of total number of steps daily taken", xlab=""))
+hist(activity_sum$steps, main="Total number of steps daily taken", xlab="")
 
-print(mean(activity_sum$daily))
-print(median(activity_sum$daily))
+mean(activity_sum$steps)
+median(activity_sum$steps)
 
 ```
 
