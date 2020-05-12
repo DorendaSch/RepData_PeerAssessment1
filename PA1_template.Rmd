@@ -7,15 +7,35 @@ output:
 
 
 ## Loading and preprocessing the data
-
-
+```{r, echo=TRUE}
+unzip("activity.zip")
+activity <- read.csv("activity.csv", header=TRUE)
+```
 
 ## What is mean total number of steps taken per day?
 
+```{r, echo=TRUE}
+library(dplyr)
+
+activity_sum <- activity%>%
+    group_by(date) %>%
+    summarise(daily=sum(steps, na.rm=TRUE))
+
+print(hist(activity_sum$daily, main="Histogram of total number of steps daily taken", xlab=""))
+
+print(mean(activity_sum$daily))
+print(median(activity_sum$daily))
+
+```
 
 
 ## What is the average daily activity pattern?
 
+```{r, echo=TRUE}
+
+
+
+```
 
 
 ## Imputing missing values
