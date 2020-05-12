@@ -33,13 +33,30 @@ print(median(activity_sum$daily))
 
 ```{r, echo=TRUE}
 
+activity_av <- activity%>%
+    group_by(interval) %>%
+    summarise(av=mean(steps, na.rm=TRUE))
 
+print(plot(activity_av$interval, activity_av$av, type="l", xlab="5min interval", ylab="average number of steps", main="Average number of steps over the 5min intervals"))
+
+print(activity_av[activity_av$av==max(activity_av$av),])
 
 ```
 
 
 ## Imputing missing values
 
+```{r, echo=TRUE}
+
+
+
+```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r, echo=TRUE}
+
+
+
+```
+
