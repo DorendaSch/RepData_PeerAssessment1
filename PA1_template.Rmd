@@ -10,6 +10,8 @@ output:
 ```{r, echo=TRUE}
 unzip("activity.zip")
 activity <- read.csv("activity.csv", header=TRUE)
+activity$date <- as.Date(activity$date, format = "%Y-%m-%d")
+activity$interval <- as.factor(activity$interval)
 ```
 
 ## What is mean total number of steps taken per day?
@@ -37,7 +39,7 @@ activity_av <- activity%>%
     group_by(interval) %>%
     summarise(av=mean(steps, na.rm=TRUE))
 
-print(plot(activity_av$interval, activity_av$av, type="l", xlab="5min interval", ylab="average number of steps", main="Average number of steps over the 5min intervals"))
+print(plot(activity_av$interval, activity_av$av, type="l", xlab="5min interval", ylab="average number of steps", main="Average daily activity pattern"))
 
 print(activity_av[activity_av$av==max(activity_av$av),])
 
@@ -48,6 +50,7 @@ print(activity_av[activity_av$av==max(activity_av$av),])
 
 ```{r, echo=TRUE}
 
+sum(is.na(activity))
 
 
 ```
