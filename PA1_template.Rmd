@@ -15,6 +15,7 @@ activity$interval <- as.factor(activity$interval)
 ```
 
 ## What is mean total number of steps taken per day?
+Sum steps by day, create Histogram, and calculate mean and median.
 
 ```{r, echo=TRUE}
 
@@ -31,6 +32,9 @@ median(activity_sum$steps)
 
 ## What is the average daily activity pattern?
 
+To address this, a timeline plot of the activity over the day was made.
+The maximum average number of steps was 206 in interval 835.
+
 ```{r, echo=TRUE}
 library(dplyr)
 activity_av <- activity%>%
@@ -45,6 +49,8 @@ activity_av[activity_av$av==max(activity_av$av),]
 
 
 ## Imputing missing values
+
+Missing data needed to be imputed. Missing values were imputed by inserting the average for each interval. The resulting histogram of total number of steps daily taken is quite similar to the histogram without imputed missing data.
 
 ```{r, echo=TRUE}
 
@@ -65,11 +71,24 @@ median(imputed_sum$steps)
 
 ```
 
+Since the mean was taken to replace missing values, the overall mean hasn't changed. The median has slightly changed, it moved towards the mean.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+In the line plots, there is a clearer peak in activity on weekdays. A higher overall activity is observed in the weekend.
+
 ```{r, echo=TRUE}
 
+weekdays <- c("maandag", "dinsdag", "woensdag", "donderdag", 
+              "vrijdag")
 
+imputed_data$dow = as.factor(ifelse(is.element(weekdays(as.Date(imputed_data$date)),weekdays), "Weekday", "Weekend"))
+
+imputed_dow <- aggregate(steps ~ interval + dow, imputed_data, mean)
+
+library(lattice)
+
+xyplot(imputed_dow$steps ~ imputed_dow$interval|imputed_dow$dow, main="Average Steps per Day by Interval",xlab="Interval", ylab="Steps",layout=c(1,2), type="l")
 
 ```
 
